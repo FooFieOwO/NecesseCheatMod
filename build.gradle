@@ -5,12 +5,12 @@ plugins {
 // Change the values below this to your mods values
 // To change the project name, edit the settings.gradle file
 
-project.ext.modID = "fair.examplemod" // The unique id of your mod. Must be all lowercase and cannot use special characters.
-project.ext.modName = "Example Mod" // The display name of your mod.
-project.ext.modVersion = "1.0" // Your current builds version. Must follow the xx.xx... format.
-project.ext.gameVersion = "0.31.0" // The target game version.
-project.ext.modDescription = "Just an example mod" // Short description of what your mod is.
-project.ext.author = "Fair" // Your name
+project.ext.modID = "foofieowo.cheatmod" // The unique id of your mod. Must be all lowercase and cannot use special characters.
+project.ext.modName = "Cheat Mod" // The display name of your mod.
+project.ext.modVersion = "0.0.1" // Your current builds version. Must follow the xx.xx... format.
+project.ext.gameVersion = "0.32.1" // The target game version.
+project.ext.modDescription = "A little cheat mod for necesse." // Short description of what your mod is.
+project.ext.author = "FooFieOwO" // Your name
 
 /**
  * When setting clientside to true, it means servers do not need this mod for clients to connect and vice versa.
@@ -27,8 +27,27 @@ project.ext.clientside = false
 //project.ext.modDependencies = ["other.modid1", "other.modid2"]
 //project.ext.modOptionalDependencies = ["optional.modid1", "optional.modid2"]
 
-// The path to the games install directory
-def gameDirectory = "C:/Program Files (x86)/Steam/steamapps/common/Necesse"
+def configFile = file("localInfo.properties")
+
+if (!configFile.exists()) {
+    println "Config file not found. Creating default one."
+
+    configFile.text = """\
+    gameDirectory=
+    """.stripIndent()
+}
+
+def properties = new Properties()
+
+configFile.withInputStream { stream ->
+    properties.load(stream)
+}
+
+if (properties.getProperty("gameDirectory") == null || properties.getProperty("gameDirectory").isEmpty()) {
+    throw new IllegalStateException("You need to set your Necesse game directory into the localInfo.properties file.")
+}
+
+def gameDirectory = properties.getProperty("gameDirectory")
 
 // =================================================
 // ========== DO NOT EDIT BELOW THIS LINE ==========
